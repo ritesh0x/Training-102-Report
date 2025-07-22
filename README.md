@@ -20,7 +20,7 @@ The repository is live on GitHub Pages and can be accessed here:
 
 ## Contact
 
-For more details, feel free to connect with me on [LinkedIn](https://www.linkedin.com/in/ritesh0x-profile).
+For more details, feel free to connect with me on [LinkedIn](https://www.linkedin.com/in/ritesh0x/).
 
 ---
 
