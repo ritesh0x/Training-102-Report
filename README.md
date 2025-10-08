@@ -1,4 +1,4 @@
-# 4-Week Industrial Training at Doordarshan Bhawan
+# 4-Week Industrial Training at Ansh Infotech
 
 ## From 18/06/2025 to 21/07/2025
 
