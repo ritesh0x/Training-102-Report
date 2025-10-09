@@ -912,7 +912,9 @@
             title="GitHub"
             ><i class="fab fa-github"></i
           ></a>
-          <a href="mailto:riteshkumargupta978@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
+          <a href="mailto:riteshkumargupta978@gmail.com" title="Email"
+            ><i class="fas fa-envelope"></i
+          ></a>
         </div>
         <p>
           <a
@@ -925,12 +927,11 @@
         <p>&copy; 2025 Ritesh Kumar Gupta</p>
       </footer>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
       // --- SCRIPT START ---
       let pages;
+      let pdfViewer, dayTitle, prevDayBtn, nextDayBtn, gallerySlider;
       let galleryIndex = 0,
         galleryInterval,
         currentDay = 1;
@@ -954,35 +955,36 @@
         },
       ];
 
-      // --- Page Navigation ---
+      // --- Functions need to be global to be called by onclick attributes in HTML ---
+
       function showPage(pageId) {
         if (!pages) return;
         pages.forEach((page) => page.classList.remove("active"));
         document.getElementById(pageId).classList.add("active");
         window.scrollTo(0, 0);
-        if (pageId === "gallery") startGallery();
-        else stopGallery();
+        if (pageId === "gallery") {
+          startGallery();
+        } else {
+          stopGallery();
+        }
       }
 
-      // --- PDF Modal Logic ---
       function openPdfModal(dayNumber) {
         const modal = document.getElementById("pdf-modal");
         modal.style.display = "block";
-        setTimeout(() => (modal.style.opacity = "1"), 10); // For fade-in effect
+        setTimeout(() => (modal.style.opacity = "1"), 10);
         loadPdfInModal(dayNumber);
       }
 
       function closePdfModal() {
         const modal = document.getElementById("pdf-modal");
         modal.style.opacity = "0";
-        setTimeout(() => (modal.style.display = "none"), 300); // Wait for fade-out
+        setTimeout(() => (modal.style.display = "none"), 300);
       }
 
       function loadPdfInModal(dayNumber) {
         currentDay = dayNumber;
         const pdfUrl = `https://ritesh0x.github.io/Training-102-Report/Day${currentDay}.pdf`;
-
-        // Get modal elements
         const modalTitle = document.getElementById("modal-title");
         const pdfViewer = document.getElementById("pdf-viewer-modal");
         const contentBox = pdfViewer.parentElement;
@@ -990,22 +992,14 @@
         const newTabBtn = document.getElementById("modal-newtab-btn");
         const prevBtn = document.getElementById("modal-prev-btn");
         const nextBtn = document.getElementById("modal-next-btn");
-
-        // 1. Show loader and fade out old PDF
         contentBox.classList.add("is-loading");
-
-        // 2. Update content
-        modalTitle.textContent = `Day ${currentDay} Report`;
-        downloadBtn.href = pdfUrl;
-        newTabBtn.href = pdfUrl;
-
-        // 3. Load new PDF and fade in when ready
         pdfViewer.onload = () => {
           contentBox.classList.remove("is-loading");
         };
+        modalTitle.textContent = `Day ${currentDay} Report`;
+        downloadBtn.href = pdfUrl;
+        newTabBtn.href = pdfUrl;
         pdfViewer.src = pdfUrl;
-
-        // 4. Update Previous/Next buttons
         prevBtn.style.visibility = currentDay === 1 ? "hidden" : "visible";
         nextBtn.style.visibility =
           currentDay === TOTAL_DAYS ? "hidden" : "visible";
@@ -1018,15 +1012,52 @@
         }
       }
 
-      // --- Gallery Logic ---
-      function setupGallery() {
-        /* ... function remains the same ... */
+      // --- NEW & UPDATED GALLERY FUNCTIONS ---
+      function slideNext() {
+        if (galleryIndex >= galleryMedia.length) return;
+        galleryIndex++;
+        gallerySlider.style.transition = "transform 0.8s ease-in-out";
+        gallerySlider.style.transform = `translateX(-${galleryIndex * 100}%)`;
       }
+
+      function slidePrev() {
+        if (galleryIndex <= 0) {
+          gallerySlider.style.transition = "none";
+          galleryIndex = galleryMedia.length;
+          gallerySlider.style.transform = `translateX(-${galleryIndex * 100}%)`;
+          setTimeout(() => {
+            galleryIndex--;
+            gallerySlider.style.transition = "transform 0.8s ease-in-out";
+            gallerySlider.style.transform = `translateX(-${
+              galleryIndex * 100
+            }%)`;
+          }, 50);
+        } else {
+          galleryIndex--;
+          gallerySlider.style.transition = "transform 0.8s ease-in-out";
+          gallerySlider.style.transform = `translateX(-${galleryIndex * 100}%)`;
+        }
+      }
+
       function startGallery() {
-        /* ... function remains the same ... */
+        stopGallery();
+        galleryInterval = setInterval(slideNext, 3000);
       }
+
       function stopGallery() {
-        /* ... function remains the same ... */
+        clearInterval(galleryInterval);
+      }
+
+      function setupGallery() {
+        gallerySlider.innerHTML = "";
+        galleryMedia.forEach((media) => {
+          const img = document.createElement("img");
+          img.src = media.src;
+          img.alt = media.caption;
+          gallerySlider.appendChild(img);
+        });
+        const firstClone = gallerySlider.firstElementChild.cloneNode(true);
+        gallerySlider.appendChild(firstClone);
       }
 
       function setupTimeline() {
@@ -1067,7 +1098,7 @@
           item.className = "timeline-item";
           const content = document.createElement("div");
           content.className = "timeline-content";
-          content.onclick = () => openPdfModal(i); // <-- UPDATED to call modal
+          content.onclick = () => openPdfModal(i);
           content.innerHTML = `<h3>Day ${i}</h3><p>${
             topics[i - 1] || "Training Activities"
           }</p>`;
@@ -1076,63 +1107,10 @@
         }
       }
 
-      // --- Main Setup on Page Load ---
       document.addEventListener("DOMContentLoaded", () => {
         pages = document.querySelectorAll(".page");
+        gallerySlider = document.getElementById("gallery-slider");
 
-        // Modal close events
-        document.getElementById("modal-close-btn").onclick = closePdfModal;
-        document.getElementById("pdf-modal").onclick = function (event) {
-          if (event.target === this) {
-            // Only close if clicking the background
-            closePdfModal();
-          }
-        };
-
-        // Modal navigation events
-        document.getElementById("modal-prev-btn").onclick = () =>
-          navigateModal(-1);
-        document.getElementById("modal-next-btn").onclick = () =>
-          navigateModal(1);
-
-        // Scroll to Top Button Logic
-        const scrollTopBtn = document.getElementById("scrollTopBtn");
-        window.onscroll = function () {
-          if (
-            document.body.scrollTop > 100 ||
-            document.documentElement.scrollTop > 100
-          ) {
-            scrollTopBtn.style.display = "block";
-          } else {
-            scrollTopBtn.style.display = "none";
-          }
-        };
-        scrollTopBtn.onclick = function () {
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        };
-        // --- Keyboard Navigation for PDF Modal ---
-        window.addEventListener("keydown", function (event) {
-          const modal = document.getElementById("pdf-modal");
-          // Only do something if the modal is actually open
-          if (modal.style.display === "block") {
-            if (event.key === "ArrowRight") {
-              // Prevent the browser from scrolling
-              event.preventDefault();
-              navigateModal(1); // Go to the next day
-            } else if (event.key === "ArrowLeft") {
-              event.preventDefault();
-              navigateModal(-1); // Go to the previous day
-            } else if (event.key === "Escape") {
-              // Also allow closing the modal with the Escape key
-              event.preventDefault();
-              closePdfModal();
-            }
-          }
-        });
-        setupTimeline();
-        // The setupGallery, startGallery, and stopGallery functions need to be defined
-        // I will paste them here in full for completeness
-        const gallerySlider = document.getElementById("gallery-slider");
         gallerySlider.addEventListener("transitionend", () => {
           if (galleryIndex >= galleryMedia.length) {
             gallerySlider.style.transition = "none";
@@ -1140,33 +1118,73 @@
             gallerySlider.style.transform = `translateX(0)`;
           }
         });
-        setupGallery = function () {
-          gallerySlider.innerHTML = "";
-          galleryMedia.forEach((media) => {
-            const img = document.createElement("img");
-            img.src = media.src;
-            img.alt = media.caption;
-            gallerySlider.appendChild(img);
-          });
-          const firstClone = gallerySlider.firstElementChild.cloneNode(true);
-          gallerySlider.appendChild(firstClone);
-        };
-        startGallery = function () {
-          stopGallery();
-          galleryInterval = setInterval(() => {
-            galleryIndex++;
-            gallerySlider.style.transition = "transform 0.8s ease-in-out";
-            gallerySlider.style.transform = `translateX(-${
-              galleryIndex * 100
-            }%)`;
-          }, 3000);
-        };
-        stopGallery = function () {
-          clearInterval(galleryInterval);
-        };
 
+        // --- ALL KEYBOARD LISTENERS ---
+        window.addEventListener("keydown", (event) => {
+          const modal = document.getElementById("pdf-modal");
+          const galleryPage = document.getElementById("gallery");
+
+          // Listener for PDF Modal
+          if (modal.style.display === "block") {
+            if (event.key === "ArrowRight") {
+              event.preventDefault();
+              navigateModal(1);
+            } else if (event.key === "ArrowLeft") {
+              event.preventDefault();
+              navigateModal(-1);
+            } else if (event.key === "Escape") {
+              event.preventDefault();
+              closePdfModal();
+            }
+          }
+
+          // Listener for Gallery
+          if (galleryPage.classList.contains("active")) {
+            if (event.key === "ArrowRight") {
+              event.preventDefault();
+              slideNext();
+              startGallery(); // Reset the auto-slide timer
+            } else if (event.key === "ArrowLeft") {
+              event.preventDefault();
+              slidePrev();
+              startGallery(); // Reset the auto-slide timer
+            }
+          }
+        });
+
+        // Scroll to Top Button Logic
+        const scrollTopBtn = document.getElementById("scrollTopBtn");
+        if (scrollTopBtn) {
+          window.onscroll = () => {
+            if (
+              document.body.scrollTop > 100 ||
+              document.documentElement.scrollTop > 100
+            ) {
+              scrollTopBtn.style.display = "block";
+            } else {
+              scrollTopBtn.style.display = "none";
+            }
+          };
+          scrollTopBtn.onclick = () => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          };
+        }
+
+        // Modal close events
+        document.getElementById("modal-close-btn").onclick = closePdfModal;
+        document.getElementById("pdf-modal").onclick = function (event) {
+          if (event.target === this) {
+            closePdfModal();
+          }
+        };
+        document.getElementById("modal-prev-btn").onclick = () =>
+          navigateModal(-1);
+        document.getElementById("modal-next-btn").onclick = () =>
+          navigateModal(1);
+
+        // Initial setups
+        setupTimeline();
         setupGallery();
-
         particlesJS("particles-js", {
           particles: {
             number: {
