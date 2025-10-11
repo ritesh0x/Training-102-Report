@@ -76,6 +76,7 @@
         cursor: pointer;
         font-weight: bold;
         transition: all 0.2s ease;
+        align-items: center;
       }
       .header-home-button:hover {
         border-color: var(--accent-color);
@@ -411,32 +412,32 @@
         border-radius: 5px;
       }
 
-      #projects .project-details {
+      #project .project-details {
         background: var(--secondary-bg);
         border: 1px solid var(--border-color);
         padding: 25px;
         border-radius: 8px;
         text-align: center;
       }
-      #projects h3 {
+      #project h3 {
         font-family: "Orbitron", sans-serif;
         color: var(--accent-color);
         font-size: 1.5em;
       }
-      #projects ol {
+      #project ol {
         list-style-position: inside;
         text-align: left;
         max-width: 600px;
         margin: 20px auto;
       }
-      #projects .project-links {
+      #project .project-links {
         margin-top: 30px;
         display: flex;
         justify-content: center;
         gap: 15px;
         flex-wrap: wrap;
       }
-      #projects .project-links .nav-button {
+      #project .project-links .nav-button {
         padding: 15px 25px;
       }
 
@@ -484,25 +485,14 @@
         display: flex;
         flex-direction: column;
       }
+      /* UPDATE this rule */
       .modal-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 15px;
       }
-      .close-button {
-        color: #aaa;
-        font-size: 38px;
-        font-weight: bold;
-        background: none;
-        border: none;
-        cursor: pointer;
-      }
-      .close-button:hover,
-      .close-button:focus {
-        color: white;
-        text-decoration: none;
-      }
+
       .modal-controls {
         display: flex;
         justify-content: space-between;
@@ -518,7 +508,77 @@
       .modal-controls .nav-button i {
         margin-right: 8px;
       }
+      .modal-footer {
+        text-align: center;
+        margin-top: 20px;
+      }
+      /* --- RESPONSIVE VIDEO CONTAINER --- */
+      .video-container {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        padding-top: 56.25%; /* 16:9 Aspect Ratio */
+        margin: 30px auto; /* Centered with auto margins */
+        max-width: 800px; /* Limit max width for large screens */
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+      }
+      .video-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+      /* --- VIDEO THUMBNAIL & MODAL STYLES --- */
+      .video-thumbnail {
+        position: relative;
+        cursor: pointer;
+        max-width: 400px; /* Controls the small size of the thumbnail */
+        margin: 30px auto;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid var(--border-color);
+        transition: transform 0.3s ease;
+      }
+      .video-thumbnail:hover {
+        transform: scale(1.05);
+      }
+      .video-thumbnail img {
+        width: 100%;
+        display: block;
+      }
+      .play-icon {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 40px;
+        color: white;
+        background-color: rgba(0, 0, 0, 0.6);
+        width: 80px;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: background-color 0.3s ease;
+      }
+      .video-thumbnail:hover .play-icon {
+        background-color: rgba(255, 0, 0, 0.8);
+      }
 
+      .video-modal-content {
+        background-color: var(--secondary-bg);
+        margin: 5vh auto;
+        width: 90%;
+        max-width: 1200px;
+        border-radius: 8px;
+        position: relative;
+      }
       /* --- LOADER STYLES --- */
       .content-box {
         position: relative;
@@ -641,7 +701,7 @@
               intersection of cybersecurity, algorithms, and information
               retrieval. This portfolio documents my experience during a
               comprehensive four-week cybersecurity training at Ansh Infotech,
-              where I developed practical skills and created projects like
+              where I developed practical skills and created project like
               <strong>AudioCrypt</strong>, a tool for audio steganography and
               encryption. I am eager to apply my skills to solve challenging
               problems in the tech industry.
@@ -664,8 +724,8 @@
             <button class="nav-button" onclick="showPage('gallery')">
               Tool Demonstrations
             </button>
-            <button class="nav-button" onclick="showPage('projects')">
-              Projects
+            <button class="nav-button" onclick="showPage('project')">
+              Project
             </button>
           </div>
         </div>
@@ -803,7 +863,9 @@
             </div>
             <div class="cert-column">
               <details>
-                <summary>Certificate 3: Qualys Vulnerability Management</summary>
+                <summary>
+                  Certificate 3: Qualys Vulnerability Management
+                </summary>
                 <div class="cert-image-container">
                   <img src="qualys.png" alt="Qualys Vulnerability Management" />
                 </div>
@@ -820,12 +882,12 @@
           </div>
           <div class="gallery-container"><div id="gallery-slider"></div></div>
         </div>
-        <div id="projects" class="page">
+        <div id="project" class="page">
           <div class="page-header">
             <button class="back-button" onclick="showPage('home')">
               Back to Menu
             </button>
-            <h2 class="page-title">Projects</h2>
+            <h2 class="page-title">Project</h2>
           </div>
           <div class="project-details">
             <h3>AudioCrypt Project</h3>
@@ -833,6 +895,69 @@
               A secure audio steganography tool to hide encrypted messages
               within audio files using AES-256 and LSB techniques.
             </p>
+            <!-- <div class="video-container">
+              <iframe
+                src="https://www.youtube.com/embed/43s2JZ8JqiY"
+                title="YouTube video player"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen
+              ></iframe>
+            </div> -->
+            <div
+              class="video-thumbnail"
+              onclick="openVideoModal('43s2JZ8JqiY')"
+            >
+              <img
+                src="https://img.youtube.com/vi/43s2JZ8JqiY/hqdefault.jpg"
+                alt="AudioCrypt Project Video Thumbnail"
+              />
+              <div class="play-icon"><i class="fas fa-play"></i></div>
+            </div>
+
+            <!-- <div id="video-modal" class="modal-overlay">
+              <div class="video-modal-content">
+                <button id="video-modal-close-btn" class="close-button">
+                  &times;
+                </button>
+                <div class="video-container" id="video-modal-container"></div>
+                <div class="modal-footer">
+                  <button class="back-button" onclick="closeVideoModal()">
+                    Back to Project
+                  </button>
+                </div>
+              </div>
+            </div> -->
+            <div id="video-modal" class="modal-overlay">
+              <div class="video-modal-content">
+                <!-- <div class="modal-header">
+                  <button class="back-button" onclick="closeVideoModal()">
+                    Back to Project
+                  </button>
+                  <button
+                    class="header-home-button"
+                    onclick="closeVideoModal(); showPage('home');"
+                  >
+                    Home
+                  </button>
+                </div> -->
+                <div class="modal-header">
+                  <button class="back-button" onclick="closeVideoModal()">
+                    Back to Project
+                  </button>
+                  <h2 class="page-title">Project</h2>
+                  <button
+                    class="header-home-button"
+                    onclick="closeVideoModal(); showPage('home');"
+                  >
+                    Home
+                  </button>
+                </div>
+
+                <div class="video-container" id="video-modal-container"></div>
+              </div>
+            </div>
             <b>Features:</b>
             <ol>
               <li>
@@ -855,8 +980,8 @@
         </div>
         <div id="audiocrypt-steps" class="page">
           <div class="page-header">
-            <button class="back-button" onclick="showPage('projects')">
-              Back to Projects
+            <button class="back-button" onclick="showPage('project')">
+              Back to Project
             </button>
             <h2 class="page-title">AudioCrypt Steps</h2>
           </div>
@@ -1019,7 +1144,23 @@
           loadPdfInModal(newDay);
         }
       }
+      function openVideoModal(videoId) {
+        const modal = document.getElementById("video-modal");
+        const videoContainer = document.getElementById("video-modal-container");
+        videoContainer.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
+        modal.style.display = "block";
+        setTimeout(() => (modal.style.opacity = "1"), 10);
+      }
 
+      function closeVideoModal() {
+        const modal = document.getElementById("video-modal");
+        const videoContainer = document.getElementById("video-modal-container");
+        modal.style.opacity = "0";
+        setTimeout(() => {
+          modal.style.display = "none";
+          videoContainer.innerHTML = "";
+        }, 300);
+      }
       // --- NEW & UPDATED GALLERY FUNCTIONS ---
       function slideNext() {
         if (galleryIndex >= galleryMedia.length) return;
